@@ -1,0 +1,109 @@
+{
+  "id": "d3fe2cc7-132d-429b-b49d-92d868c105e4",
+  "projectId": "example",
+  "status": "FAILURE",
+  "source": {
+    "repoSource": {
+      "projectId": "example",
+      "repoName": "example-configerator",
+      "branchName": "master"
+    }
+  },
+  "steps": [
+    {
+      "name": "gcr.io/cloud-builders/git",
+      "args": [
+        "clone",
+        "--no-checkout",
+        "--verbose",
+        "https://source.developers.google.com/p/example/r/example-config-gce",
+        "dist"
+      ]
+    },
+    {
+      "name": "gcr.io/cloud-builders/git",
+      "args": [
+        "checkout",
+        "-B",
+        "master"
+      ],
+      "dir": "dist"
+    },
+    {
+      "name": "gcr.io/cloud-builders/docker",
+      "args": [
+        "build",
+        "-t",
+        "eu.gcr.io/example/example-configerator:a41f55d4e180ebbfde5feb96840136457ea47c8a",
+        "."
+      ]
+    },
+    {
+      "name": "gcr.io/cloud-builders/docker",
+      "args": [
+        "run",
+        "-v",
+        "/workspace:/opt/example/",
+        "eu.gcr.io/example/example-configerator:a41f55d4e180ebbfde5feb96840136457ea47c8a",
+        "bash",
+        "-c",
+        "bin/build.sh"
+      ]
+    },
+    {
+      "name": "gcr.io/cloud-builders/git",
+      "args": [
+        "add",
+        "--verbose",
+        "*"
+      ],
+      "dir": "dist"
+    },
+    {
+      "name": "gcr.io/cloud-builders/git",
+      "args": [
+        "config",
+        "user.email",
+        "dev@example.com"
+      ],
+      "dir": "dist"
+    },
+    {
+      "name": "gcr.io/cloud-builders/git",
+      "args": [
+        "commit",
+        "-am",
+        "[example_configerator]",
+        "-m",
+        "https://github.com/example/example_configerator/commit/a41f55d4e180ebbfde5feb96840136457ea47c8a"
+      ],
+      "dir": "dist"
+    },
+    {
+      "name": "gcr.io/cloud-builders/git",
+      "args": [
+        "push",
+        "origin",
+        "master"
+      ],
+      "dir": "dist"
+    }
+  ],
+  "createTime": "2017-05-15T17:46:11.125046Z",
+  "startTime": "2017-05-15T17:46:12.082299Z",
+  "finishTime": "2017-05-15T17:47:44.093185Z",
+  "timeout": "600.000s",
+  "images": [
+    "eu.gcr.io/example/example-configerator:a41f55d4e180ebbfde5feb96840136457ea47c8a"
+  ],
+  "logsBucket": "gs://203985838769.cloudbuild-logs.googleusercontent.com",
+  "sourceProvenance": {
+    "resolvedRepoSource": {
+      "projectId": "example",
+      "repoName": "example-configerator",
+      "commitSha": "a41f55d4e180ebbfde5feb96840136457ea47c8a"
+    }
+  },
+  "buildTriggerId": "7873dda3-9610-4d0a-bdcb-a2ecce3d0f54",
+  "logUrl": "https://console.cloud.google.com/gcr/builds/d3fe2cc7-132d-429b-b49d-82d868c105e4?project=example"
+}

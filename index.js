@@ -9,23 +9,10 @@ exports.onbuildstatus = function (event, callback) {
 
   console.info(data);
 
-  const {
-    status,
-    statusDetail,
-    results,
-    startTime,
-    finishTime,
-    source,
-    logUrl
-  } = JSON.parse(data);
+  const build = JSON.parse(data);
   
-  const webhookUri = config.SLACK_WEBHOOK_URL;
- 
-  slack = new Slack();
-  slack.setWebhook(webhookUri);
-
-  const statusColor = (status) => {
-    switch(status) {
+  const statusColor = (build) => {
+    switch(build.status) {
     case 'SUCCESS':
       return '#36A64F';
     case 'QUEUED':
@@ -51,31 +38,44 @@ exports.onbuildstatus = function (event, callback) {
         source.repoSource.branchName :
         source.storageSource.bucket;
 
-  const title = (source, status) => `[${downCap(status)}] ${titleName(source)} (${titleMeta(source)})`;
+  const title = ({ source, status }) =>
+        `[${downCap(status)}] ${titleName(source)} (${titleMeta(source)})`;
   
-  const body = (status, statusDetail, logUrl) => (status === 'SUCCESS') ?
+  const body = ({ status, results, logUrl }) => (status === 'SUCCESS') ?
         `${imageLinks(results.images).join('\n')}` :
-        `${statusDetail}\n<${logUrl} | View Build>`;
+        `<${logUrl} | View Build>`;
 
   const duration = (milli) => {
     const seconds = Math.floor((milli / 1000) % 60);
     const minutes = (Math.floor((milli / (60 * 1000)) % 60));
     const dur = (minutes) ? `${minutes} min ${seconds} sec` : `${seconds} sec`;
     return dur;
-}
+  }
 
-  slack.webhook({
+  const fallback = (build) => build.status;
+
+  const footer = (build) => (['WORKING', 'QUEUED', 'STATUS_UNKNOWN'].includes(build.status)) ?
+                             null :
+                             duration(new Date(build.finishTime) - new Date(build.startTime));
+
+  const options = {
     channel: `#${config.SLACK_CHANNEL}`,
     username: config.SLACK_USERNAME,
     text: null,
     attachments: [{
-      fallback: statusDetail,
-      color: statusColor(status),
-      title: title(source, status),
-      text: body(status, statusDetail, logUrl),
-      footer: duration(new Date(finishTime) - new Date(startTime))
+      fallback: fallback(build),
+      color: statusColor(build),
+      title: title(build),
+      text: body(build),
+      footer: footer(build)
     }]
-  }, function(err, response) {
+  };
+
+  const webhookUri = config.SLACK_WEBHOOK_URL;
+ 
+  slack = new Slack();
+  slack.setWebhook(webhookUri);
+  slack.webhook(options, function (err, response) {
     callback(err, response);
   });
 };
