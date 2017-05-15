@@ -1,10 +1,10 @@
 #! /bin/bash
 
-echo "Enter slack incoming webhook URL"
+echo "Enter slack incoming webhook URL:"
 read slack_webhook_url
-echo "Enter slack channel name"
+echo "Enter slack channel name (without #):"
 read slack_channel
-echo "Enter slack bot username"
+echo "Enter slack bot username:"
 read slack_username
 
 echo "{ \

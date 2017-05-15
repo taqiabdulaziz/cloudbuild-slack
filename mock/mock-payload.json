@@ -1,30 +1,52 @@
 {
-  "id": "[buildId]",
-  "projectId": "[projectId]",
-  "status": "[STATUS]",
-  "statusDetail": "Successful",
+  "id":"e1a1e9f6-ac98-432d-8f64-753f96aa2152",
+  "projectId":"example-123",
+  "status":"SUCCESS",
   "source": {
-
+    "repoSource": {
+      "projectId":"example-123",
+      "repoName":"example-reponame",
+      "branchName":"example-branch"
+    }
   },
   "steps": [
-    {}
+    {
+      "name":"gcr.io/cloud-builders/docker",
+      "args": [
+        "build","-t","eu.gcr.io/example-123/example:5ce367b9fd6885188c2c67614c85de92e8dcd171","."
+      ]
+    }
   ],
   "results": {
+    "images": [
+      {
+        "name":"eu.gcr.io/example-123/example1:5ce367b9fd6885188c2c67614c85de92e8dcd171",
+        "digest":"sha256:c54bb85001f7e934e2307c451db3d447840ea65885acb191b681706ef3568487"
+      },
+      {
+        "name":"eu.gcr.io/example-123/example2:5ce367b9fd6885188c2c67614c85de92e8dcd171",
+        "digest":"sha256:c54bb85001f7e934e2307c451db3d447840ea65885acb191b681706ef3568d87"
+      }
+    ],
+    "buildStepImages": [
+      "sha256:aab75390c63c5aadcdcae350d4af9705c20d734935d8793f769ee31fd2fe7a07"
+    ]
   },
-  "createTime": "[createtime]",
-  "startTime": "[startTime]",
-  "finishTime": "[finishtime]",
-  "timeout": "[timeout]",
+  "createTime":"2017-05-12T14:24:30.113932Z",
+  "startTime":"2017-05-12T14:24:30.938780Z",
+  "finishTime":"2017-05-12T14:26:48.568891Z",
+  "timeout":"600.000s",
   "images": [
-    "[imagename]"
+    "eu.gcr.io/example-123/example:5ce367b9fd6885188c2c67614c85de92e8dcd171"
   ],
-  "logsBucket": "[logsBucket]",
+  "logsBucket":"gs://203985838769.cloudbuild-logs.googleusercontent.com",
   "sourceProvenance": {
+    "resolvedRepoSource": {
+      "projectId":"example-123",
+      "repoName":"example",
+      "commitSha":"5ce367b9fd6885188c2c67614c85de92e8dcd171"
+    }
   },
-  "buildTriggerId": "[buildtriggerId]",
-  "options": {
-  },
-  "logUrl": "[logUrl]",
-  "substitutions": {
-  }
+  "buildTriggerId":"db082db4-941f-44c5-baa8-2a7d9b937b98",
+  "logUrl":"https://console.cloud.google.com/gcr/builds/e1a1e9f6-ac98-432f-8f64-753f96aa2152?project=example-123"
 }

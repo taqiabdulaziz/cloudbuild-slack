@@ -13,8 +13,21 @@
 gcloud beta function deploy <NAME> --stage-bucket <BUCKET_NAME> --trigger-topic cloud-builds --entry-point onbuildstatus
 ```
 
+## Development
+
+Get the [GCF Emulator] and run:
+``` bash
+functions deploy onbuildstatus --trigger-topic cloud-builds
+```
+Now you can do local modifications and try it out from your local machines:
+``` bash
+functions call onbuildstatus --file mock/mock.json
+```
+
+
+
 [deploy from local machine]: https://cloud.google.com/functions/docs/deploying/filesystem
 [Google Cloud Container Builder]: https://cloud.google.com/container-builder/docs/
 [Google Cloud Function]: https://cloud.google.com/functions/
-
+[GCF Emulator]: https://cloud.google.com/functions/docs/emulator
 [instructions]: https://api.slack.com/incoming-webhooks

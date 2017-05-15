@@ -4,11 +4,17 @@ const config = require('./config.json');
 exports.onbuildstatus = function (event, callback) {
 
   const pubsubMessage = event.data;
+
   const data = Buffer.from(pubsubMessage.data, 'base64').toString();
+
+  console.info(data);
+
   const {
     status,
     statusDetail,
     results,
+    startTime,
+    finishTime,
     source,
     logUrl
   } = JSON.parse(data);
@@ -31,25 +37,43 @@ exports.onbuildstatus = function (event, callback) {
     }
   };
 
-  const title = (source) => (source.bucket) ?
-        `[${status}] ${source.object} (${source.bucket})` :
-        `[${status}] ${source.repoName} (${source.branchName})`;
+  const downCap = (str) => str.replace(/^(\w)(\w*)/, (m, p1, p2) => p1 + p2.toLowerCase());
 
-  const text = (status) => (status === 'SUCCESS') ?
-        `Successfuly built ${results.images.join(' ')}` :
-        '';
-    
+  const imageLinks = (images) => images.map(
+    image => image.name
+  );
+
+  const titleName = (source) => (source.repoSource) ?
+        source.repoSource.repoName :
+        source.storageSource.object;
+
+  const titleMeta = (source) => (source.repoSource) ?
+        source.repoSource.branchName :
+        source.storageSource.bucket;
+
+  const title = (source, status) => `[${downCap(status)}] ${titleName(source)} (${titleMeta(source)})`;
+  
+  const body = (status, statusDetail, logUrl) => (status === 'SUCCESS') ?
+        `${imageLinks(results.images).join('\n')}` :
+        `${statusDetail}\n<${logUrl} | View Build>`;
+
+  const duration = (milli) => {
+    const seconds = Math.floor((milli / 1000) % 60);
+    const minutes = (Math.floor((milli / (60 * 1000)) % 60));
+    const dur = (minutes) ? `${minutes} min ${seconds} sec` : `${seconds} sec`;
+    return dur;
+}
+
   slack.webhook({
-    channel: config.SLACK_CHANNEL,
+    channel: `#${config.SLACK_CHANNEL}`,
     username: config.SLACK_USERNAME,
     text: null,
     attachments: [{
       fallback: statusDetail,
       color: statusColor(status),
-      pretext: null,
-      title: title(source),
-      text: text(status),
-      footer: logUrl
+      title: title(source, status),
+      text: body(status, statusDetail, logUrl),
+      footer: duration(new Date(finishTime) - new Date(startTime))
     }]
   }, function(err, response) {
     callback(err, response);
