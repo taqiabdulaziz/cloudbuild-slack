@@ -2,6 +2,8 @@
 
 [Google Cloud Function] that reports [Google Cloud Container Builder] progress to a slack channel.
 
+![Example output](mock/cloudbuild-slack.png)
+
 ## Installation
 
 1. Setup a new incoming slack webhook URL: [instructions]
