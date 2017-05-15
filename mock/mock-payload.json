@@ -1,0 +1,30 @@
+{
+  "id": "[buildId]",
+  "projectId": "[projectId]",
+  "status": "[STATUS]",
+  "statusDetail": "Successful",
+  "source": {
+
+  },
+  "steps": [
+    {}
+  ],
+  "results": {
+  },
+  "createTime": "[createtime]",
+  "startTime": "[startTime]",
+  "finishTime": "[finishtime]",
+  "timeout": "[timeout]",
+  "images": [
+    "[imagename]"
+  ],
+  "logsBucket": "[logsBucket]",
+  "sourceProvenance": {
+  },
+  "buildTriggerId": "[buildtriggerId]",
+  "options": {
+  },
+  "logUrl": "[logUrl]",
+  "substitutions": {
+  }
+}

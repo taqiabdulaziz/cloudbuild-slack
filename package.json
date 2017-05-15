@@ -1,0 +1,15 @@
+{
+  "name": "cloudbuild-slack",
+  "version": "0.0.0",
+  "description": "Notify devs on build status updates",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "dev@kivra.com",
+  "license": "ISC",
+  "dependencies": {
+    "@slack/client": "~3.9.0",
+    "slack-node": "~0.1.8"
+  }
+}
