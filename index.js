@@ -26,7 +26,7 @@ exports.onbuildstatus = function (event, callback) {
 
   const downCap = (str) => str.replace(/^(\w)(\w*)/, (m, p1, p2) => p1 + p2.toLowerCase());
 
-  const imageLinks = (images) => images.map(
+  const imageLinks = (images=[]) => images.map(
     image => image.name
   );
 
