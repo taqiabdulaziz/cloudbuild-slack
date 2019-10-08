@@ -1,7 +1,7 @@
 const Slack = require('slack-node');
 const config = require('./config.json');
 
-exports.onbuildstatus = function (event, callback) {
+exports.onbuildstatus = (event, callback) => {
 
   const pubsubMessage = event.data;
 
